@@ -20,3 +20,11 @@ app.use("/api", hospitalRoute);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://lifeline-dlq1vj61o-ankitkandwal-gits-projects.vercel.app"
+  ],
+  credentials: true,
+}));
