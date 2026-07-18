@@ -1,59 +1,46 @@
-import react from 'react'
-import {Link} from 'react-router-dom'
-import LifeLineNavbar from '../assets/LifeLineNavbar.jpg'
-import { motion } from 'framer-motion'
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { MessageSquare, LogOut } from 'lucide-react'; // Importing icons for better UX
 
-const Navbar = () =>{
-    return(
-        <motion.nav
-            className="bg-white shadow-md"
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 120, damping: 20 }}
-        >
-                <div className="container flex items-center justify-between px-4 py-4 mx-auto sm:px-6 lg:px-8"> {/* Centered content with responsive padding */}
-                    <div className="flex items-center flex-shrink-0 space-x-2">
-                        {/* Placeholder for logo, ensure you add your logo path here */}
-                        <img src={LifeLineNavbar} alt="LifeLineAI Logo" className="w-auto h-8"/> 
-                        <h1 className="text-2xl font-extrabold text-gray-800 tracking-wide">LifeLineAI</h1>
-                    </div>
-                    <div className="hidden gap-6 md:flex"> {/* Hide on small screens, show on medium and up */}
-                        <NavLinkMotion to="/chat">AI ChatBot</NavLinkMotion>
-                        <NavLinkMotion to="/pricing">Pricing</NavLinkMotion>
-                        <NavLinkMotion to="/contact">Contact</NavLinkMotion>
-                        <NavLinkMotion to="/how-it-works">How it Works?</NavLinkMotion>
-                    </div>
-                    {/* Mobile menu button */}
-                    <div className="md:hidden">
-                        <motion.button
-                            type="button"
-                            className="text-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <span className="sr-only">Open main menu</span>
-                            {/* Heroicon "menu" */}
-                            <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </motion.button>
-                    </div>
-                </div>
-            </motion.nav>
-    )
-}
+const Navbar = () => {
+  const navigate = useNavigate();
 
-const NavLinkMotion = ({ to, children }) => (
-    <motion.div
-        whileHover={{ scale: 1.05, color: 'rgb(59 130 246)' }} // Equivalent to text-blue-500
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.2 }}
-    >
-        <Link to={to} className="text-base font-medium text-gray-800 hover:text-blue-500 transition-colors duration-200">
-            {children}
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove the stored token
+    navigate('/login'); // Navigate to the login page
+  };
+
+  return (
+    <nav className="sticky top-0 z-50 bg-gradient-to-r from-blue-700 to-blue-500 p-4 text-white shadow-lg">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/hero" className="text-3xl font-extrabold tracking-tight hover:text-blue-100 transition-colors duration-200">
+          LifeLine AI
         </Link>
-    </motion.div>
-);
+        <div className="flex items-center space-x-6">
+          <Link 
+            to="/hero" 
+            className="flex items-center gap-2 text-lg font-medium hover:text-blue-100 transition-colors duration-200"
+          >
+            Home
+          </Link>
+          <Link 
+            to="/chat" 
+            className="flex items-center gap-2 text-lg font-medium hover:text-blue-100 transition-colors duration-200"
+          >
+            <MessageSquare size={20} />
+            Chat
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 active:scale-95"
+          >
+            <LogOut size={18} />
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;

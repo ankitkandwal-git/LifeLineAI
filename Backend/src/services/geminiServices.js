@@ -29,18 +29,12 @@ const normalizeSeverity = (severity, sourceText = "") => {
 export const analyzeEmergency = async (message) => {
   const apiKey = process.env.GEMINI_API_KEY;
 
-  console.log("API Key exists:", !!apiKey);
-  console.log("API Key length:", apiKey?.length);
-
   if (!apiKey) {
     throw new Error("GEMINI_API_KEY is missing.");
   }
 
-  // Ensure the library can pick up an API key from env if it checks at import time.
   process.env.GOOGLE_API_KEY = apiKey;
 
-  // Import the client after setting the env var to avoid the client trying
-  // to load ADC (Application Default Credentials) at module initialization.
   const { GoogleGenAI } = await import("@google/genai");
 
   const ai = new GoogleGenAI({ apiKey });
@@ -73,8 +67,6 @@ ${message}
 
     const text = response.text;
 
-    console.log(text);
-
     const cleaned = text
       .replace(/```json/g, "")
       .replace(/```/g, "")
@@ -88,7 +80,6 @@ ${message}
     };
   } catch (err) {
     console.error("Gemini generateContent error:", err?.message || err);
-    // Re-throw to preserve existing behavior for the caller.
     throw err;
   }
 };

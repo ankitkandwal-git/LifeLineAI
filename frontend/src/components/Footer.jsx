@@ -1,87 +1,99 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ShieldCheck, HeartPulse, UserCheck, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
-    return (
-        <motion.footer
-            className="py-8 text-white bg-gradient-to-r from-gray-800 to-gray-900 md:py-12"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <div className="container px-4 mx-auto">
-                {/* Top Section: Title and Tagline */}
-                <div className="flex flex-col items-center justify-between pb-6 border-b border-gray-700 md:flex-row md:pb-8">
-                    <h3 className="mb-4 text-2xl font-bold md:mb-0">LifeLineAI</h3>
-                    <p className="text-gray-300 text-md">Simple Steps for Immediate Help</p>
-                </div>
-                {/* Steps Section */}
-                <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-3 md:gap-8">
-                    <motion.div
-                        className="flex flex-col items-center p-8 text-center bg-gray-700 rounded-xl shadow-lg"
-                        whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)' }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <div className="flex items-center justify-center w-16 h-16 mb-4 text-2xl font-bold bg-blue-600 rounded-full">1</div>
-                        <h3 className="mb-2 text-2xl font-semibold">Describe Emergency</h3>
-                        <p className="text-base text-gray-300">Provide a brief description of the emergency situation.</p>
-                    </motion.div>
-                    <motion.div 
-                        className="flex flex-col items-center p-8 text-center bg-gray-700 rounded-xl shadow-lg"
-                        whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)' }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <div className="flex items-center justify-center w-16 h-16 mb-4 text-2xl font-bold bg-blue-600 rounded-full">2</div>
-                        <h3 className="mb-2 text-2xl font-semibold">Receive AI Response</h3>
-                        <p className="text-base text-gray-300">Get an instant response from our AI system with guidance and instructions.</p>
-                    </motion.div>
-                    <motion.div 
-                        className="flex flex-col items-center p-8 text-center bg-gray-700 rounded-xl shadow-lg"
-                        whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)' }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <div className="flex items-center justify-center w-16 h-16 mb-4 text-2xl font-bold bg-blue-600 rounded-full">3</div>
-                        <h3 className="mb-2 text-2xl font-semibold">Take Action</h3>
-                        <p className="text-base text-gray-300">Follow the AI's advice and take appropriate action to address the emergency.</p>
-                    </motion.div>
-                </div>
-                {/* Feature Section */}
-                <div className="mt-10 text-center md:mt-12">
-                    <h3 className="mb-4 text-xl font-semibold">Features</h3>
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 text-lg">
-                        <motion.div
-                            className="flex flex-col items-center justify-center p-8 bg-gray-700 rounded-lg shadow-md"
-                            whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)' }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <p className="text-lg text-gray-300">Real-time AI Assistance</p>
-                        </motion.div>
-                        <motion.div
-                            className="flex flex-col items-center justify-center p-8 bg-gray-700 rounded-lg shadow-md"
-                            whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)' }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <p className="text-lg text-gray-300">User-friendly Interface</p>
-                        </motion.div>
-                        <motion.div
-                            className="flex flex-col items-center justify-center p-8 bg-gray-700 rounded-lg shadow-md"
-                            whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)' }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <p className="text-lg text-gray-300">Secure and Private</p>
-                        </motion.div>
-                    </div>
-                </div>
-                {/* Copyright Section */}
-                <div className="mt-8 text-center">
-                    <p className="text-sm text-gray-400">
-                        © {new Date().getFullYear()} LifeLineAI. All rights reserved.
-                    </p>
-                </div>
-            </div> 
-        </motion.footer>
-    );
+  return (
+    <motion.footer
+      className="bg-slate-900 border-t border-slate-800 text-slate-400 py-12 lg:py-16"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="container px-4 mx-auto sm:px-6 lg:px-8">
+        
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 pb-12 border-b border-slate-800">
+          <StepCard
+            step="1"
+            title="Describe Emergency"
+            description="Write what happened."
+          />
+          <StepCard
+            step="2"
+            title="Receive AI Assessment"
+            description="Get a quick severity check."
+          />
+          <StepCard
+            step="3"
+            title="Find Nearby Care"
+            description="See nearby hospitals."
+          />
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 mt-12 md:grid-cols-12">
+          <div className="md:col-span-4 flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600">
+                <HeartPulse className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-lg font-bold tracking-tight text-white">
+                LifeLine<span className="text-blue-500">AI</span>
+              </span>
+            </div>
+            <p className="text-xs leading-relaxed text-slate-450">
+              Emergency help for quick checks, first aid notes, and hospital lookup.
+            </p>
+          </div>
+
+          <div className="md:col-span-4 flex flex-col gap-3 md:pl-10">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider">What it does</h4>
+            <div className="grid grid-cols-1 gap-2 text-xs">
+              <span className="flex items-center gap-2"><ShieldCheck className="text-blue-500" size={14} /> Quick triage summary</span>
+              <span className="flex items-center gap-2"><UserCheck className="text-blue-500" size={14} /> Simple flow</span>
+              <span className="flex items-center gap-2"><HeartPulse className="text-blue-500" size={14} /> Nearby hospitals</span>
+            </div>
+          </div>
+
+          <div className="md:col-span-4 flex flex-col gap-4">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider">Need help?</h4>
+            <p className="text-xs text-slate-455">
+              Open the chat and start typing.
+            </p>
+            <Link
+              to="/chat"
+              className="inline-flex items-center gap-1.5 self-start text-xs font-bold text-blue-500 hover:text-blue-400 group transition"
+            >
+              Chat now
+              <ArrowRight size={14} className="transition group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-slate-800/80 text-center text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} LifeLineAI. All rights reserved.</p>
+        </div>
+      </div>
+    </motion.footer>
+  );
 };
 
+const StepCard = ({ step, title, description }) => {
+  return (
+    <motion.div
+      className="flex gap-4 p-6 bg-slate-850/30 border border-slate-800/60 rounded-2xl"
+      whileHover={{ y: -2, border: "1px solid rgba(59, 130, 246, 0.2)" }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-500 font-bold text-sm flex-shrink-0">
+        {step}
+      </div>
+      <div className="flex flex-col gap-1">
+        <h4 className="text-sm font-bold text-white">{title}</h4>
+        <p className="text-xs leading-relaxed text-slate-450">{description}</p>
+      </div>
+    </motion.div>
+  );
+};
 
-export default Footer
+export default Footer;

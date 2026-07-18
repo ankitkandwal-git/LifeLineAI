@@ -1,11 +1,5 @@
 import axios from "axios";
 
-/**
- * Fetches the human-readable address for a given latitude and longitude using Nominatim Reverse Geocoding API.
- * @param {number|string} lat 
- * @param {number|string} lon 
- * @returns {Promise<string>} Human-readable address
- */
 export const fetchAddressFromCoords = async (lat, lon) => {
   if (!lat || !lon) return "Address not available";
   try {
@@ -26,14 +20,12 @@ export const fetchAddressFromCoords = async (lat, lon) => {
     return response.data?.display_name || "Address not available";
   } catch (err) {
     console.error(`Reverse geocoding failed for ${lat}, ${lon}:`, err?.message || err);
-    // Graceful fallback on API failure
+    
     return "Address not available";
   }
 };
 
-/**
- * Fetches nearby hospitals using the Overpass API.
- */
+
 export const fetchNearbyHospitals = async (latitude, longitude) => {
   const radius = 5000;
 

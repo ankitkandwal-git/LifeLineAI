@@ -1,14 +1,13 @@
 import Navbar from "../components/Navbar";
 import ChatBox from "../components/ChatBox";
 
-
-const ChatPage = () =>{
-    return(
+const ChatPage = () => {
+    return (
         <>
             <Navbar />
             <ChatBox />
         </>
-    )
-}
+    );
+};
 
-export default ChatPage
+export default ChatPage;

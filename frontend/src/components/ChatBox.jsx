@@ -1,132 +1,186 @@
 import React, { useState, useEffect, useRef } from "react";
 import EmergencyPanel from "./EmergencyPanel";
 import { sendMessage } from "../services/chatService";
-import { motion } from "framer-motion";
-import { FaPaperPlane } from "react-icons/fa";
-
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, AlertCircle, Sparkles, User, Bot } from "lucide-react";
 const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [emergencyData, setEmergencyData] = useState(null);
-  const messagesEndRef = useRef(null); // Ref for auto-scrolling
+  const messagesEndRef = useRef(null);
 
   // Auto-scroll to the bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+  const handleSendMessage = async (textToSend) => {
+    const text = textToSend || inputMessage;
+    if (!text.trim() || loading) return;
 
     const userMessage = {
-      text: inputMessage,
+      text: text,
       isUser: true,
+      timestamp: new Date()
     };
 
-    // Add user message to chat immediately
-    setMessages((prev) => [
-      ...prev,
-      userMessage,
-    ]);
-    setInputMessage(""); // Clear input box immediately
+    setMessages((prev) => [...prev, userMessage]);
+    if (!textToSend) setInputMessage("");
+    setLoading(true);
 
     try {
-      // Send message to backend
-      const data = await sendMessage(userMessage.text);
-
-      // Update Emergency Panel
+      const data = await sendMessage(text);
       setEmergencyData(data);
 
-      // Optional: Add AI response to chat
       setMessages((prev) => [
         ...prev,
         {
           text: data.summary,
           isUser: false,
+          timestamp: new Date()
         },
       ]);
     } catch (error) {
       console.error("Error sending message:", error);
-      // Optionally, add an error message to the chat
       setMessages((prev) => [
         ...prev,
         {
-          text: "Oops! Something went wrong. Please try again.",
+          text: "Couldn't finish the check. Try again in a moment.",
           isUser: false,
-          isError: true, // Custom property to style error messages
+          isError: true,
+          timestamp: new Date()
         },
       ]);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const quickPrompts = [
+    { text: "Severe chest pain and shortness of breath.", label: "Chest pain" },
+    { text: "Deep cut on the arm with a lot of bleeding.", label: "Heavy bleeding" },
+    { text: "Signs of heat exhaustion or heat stroke.", label: "Heat issue" }
+  ];
+
   return (
     <motion.div
-      className="flex flex-col max-w-6xl gap-8 p-6 mx-auto mt-8 md:flex-row"
-      initial={{ opacity: 0, y: 20 }}
+      className="container mx-auto px-4 py-8 max-w-7xl"
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.4 }}
     >
-      {/* Chat Section */}
-      <motion.div className="flex-1 flex flex-col h-[calc(100vh-120px)] p-6 bg-white rounded-2xl shadow-xl border border-gray-100">
+      <div className="flex flex-col lg:flex-row gap-8">
+        
+        {/* Left Workspace: Chat Interface (65% width on desktop) */}
+        <div className="w-full lg:w-2/3 flex flex-col h-[calc(100vh-150px)] bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xl shadow-slate-100/50 dark:shadow-none">
+          
+          {/* Conversation Workspace */}
+          <div className="flex-grow overflow-y-auto px-6 py-6 space-y-6 scrollbar-thin">
+            <AnimatePresence initial={false}>
+              {messages.length === 0 ? (
+                <motion.div
+                  className="flex flex-col items-center justify-center h-full text-center max-w-md mx-auto"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400">
+                    <Sparkles size={24} />
+                  </div>
+                  <h2 className="mt-4 text-2xl font-extrabold text-slate-800 dark:text-white">Start here</h2>
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Type what happened and the app will give a simple response.
+                  </p>
+                </motion.div>
+              ) : (
+                messages.map((msg, index) => (
+                  <motion.div
+                    key={index}
+                    className={`flex items-start gap-4 ${msg.isUser ? "justify-end" : "justify-start"}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {!msg.isUser && (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400 flex-shrink-0">
+                        <Bot size={16} />
+                      </div>
+                    )}
 
-        {/* Messages */}
-        <div className="flex-grow overflow-y-auto pr-2">
-          {messages.map((msg, index) => (
-            <motion.div
-              key={index}
-              className={`flex my-3 ${
-                msg.isUser ? "justify-end" : "justify-start"
-              }`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <div
-                className={`max-w-[70%] p-3 rounded-2xl break-words ${
-                  msg.isUser
-                    ? "bg-blue-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-800 shadow-sm"
-                } ${msg.isError ? "bg-red-500 text-white" : ""}`}
-              >
-                {msg.text}
+                    <div
+                      className={`max-w-[75%] p-4 rounded-2xl shadow-sm text-sm leading-relaxed ${
+                        msg.isUser
+                          ? "bg-blue-600 text-white rounded-tr-none font-medium"
+                          : msg.isError
+                          ? "bg-red-550 text-white rounded-tl-none font-semibold"
+                          : "bg-slate-50 border border-slate-200/50 text-slate-800 rounded-tl-none dark:bg-slate-850 dark:border-slate-800 dark:text-slate-100"
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+
+                    {msg.isUser && (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-650 dark:bg-slate-800 dark:text-slate-300 flex-shrink-0">
+                        <User size={16} />
+                      </div>
+                    )}
+                  </motion.div>
+                ))
+              )}
+            </AnimatePresence>
+            
+            {loading && (
+              <div className="flex items-start gap-4 justify-start">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400 flex-shrink-0">
+                  <Bot size={16} />
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/50 text-slate-500 rounded-tl-none dark:bg-slate-850 dark:border-slate-800 flex items-center gap-2">
+                  <span className="flex gap-1">
+                    <span className="h-2 w-2 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: "0ms" }}></span>
+                    <span className="h-2 w-2 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: "150ms" }}></span>
+                    <span className="h-2 w-2 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: "300ms" }}></span>
+                  </span>
+                  <span className="text-xs">Analyzing symptoms...</span>
+                </div>
               </div>
-            </motion.div>
-          ))}
-          <div ref={messagesEndRef} />
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="border-t border-slate-200/50 dark:border-slate-800 p-4 bg-white dark:bg-slate-900">
+            <div className="max-w-2xl mx-auto relative flex items-center">
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder={loading ? "Checking..." : "Type what happened..."}
+                disabled={loading}
+                className="w-full pl-4 pr-12 py-3.5 bg-slate-50 dark:bg-slate-850 hover:bg-slate-100/60 focus:bg-white dark:focus:bg-slate-900 border border-slate-200/60 dark:border-slate-800 focus:border-blue-500 dark:focus:border-blue-500 rounded-2xl outline-none transition duration-205 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:shadow-sm"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !loading) {
+                    handleSendMessage();
+                  }
+                }}
+              />
+
+              <button
+                onClick={() => handleSendMessage()}
+                disabled={!inputMessage.trim() || loading}
+                className="absolute right-2 p-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:bg-slate-200 disabled:text-slate-400 dark:disabled:bg-slate-800 dark:disabled:text-slate-650 active:scale-95"
+                aria-label="Send message"
+              >
+                <Send size={16} />
+              </button>
+
+            </div>
+          </div>
         </div>
 
-        {/* Input */}
-        <div className="flex mt-6">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Describe the emergency..."
-            className="flex-1 p-4 border border-gray-300 rounded-l-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700 text-lg"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSendMessage();
-              }
-            }}
-          />
-
-          <button
-            onClick={handleSendMessage}
-            className="flex items-center justify-center px-6 bg-blue-600 text-white rounded-r-2xl hover:bg-blue-700 transition-colors duration-200 ease-in-out shadow-md"
-            aria-label="Send message"
-          >
-            <FaPaperPlane className="text-xl" />
-          </button>
+        <div className="w-full lg:w-1/3 sticky top-24 self-start max-h-[calc(100vh-150px)] overflow-y-auto scrollbar-thin">
+          <EmergencyPanel data={emergencyData} />
         </div>
-      </motion.div>
 
-      {/* Emergency Panel */}
-      <motion.div
-        className="w-full md:w-1/3"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-      >
-        <EmergencyPanel data={emergencyData} />
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
