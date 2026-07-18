@@ -13,8 +13,7 @@ const connectDB = async () => {
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error(`MongoDB Connection Error: ${error.message}`);
-        // Removing process.exit(1) to allow the server to attempt to start even if DB connection fails.
-        // This can help in debugging but ensure your application handles missing DB connections gracefully.
+        process.exit(1); // Exit process with failure
     }
 }
 
