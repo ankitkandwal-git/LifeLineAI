@@ -91,6 +91,20 @@ const ChatBox = () => {
                   <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                     Type what happened and the app will give a simple response.
                   </p>
+                  <p className="mt-6 text-sm font-semibold text-slate-600 dark:text-slate-300">
+                    Or try one of these suggestions:
+                  </p>
+                  <div className="mt-4 flex flex-wrap justify-center gap-2">
+                    {quickPrompts.map((prompt, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleSendMessage(prompt.text)}
+                        className="px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors duration-200"
+                      >
+                        {prompt.label}
+                      </button>
+                    ))}
+                  </div>
                 </motion.div>
               ) : (
                 messages.map((msg, index) => (
