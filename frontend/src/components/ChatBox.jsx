@@ -127,7 +127,7 @@ const ChatBox = () => {
                           ? "bg-blue-600 text-white rounded-tr-none font-medium"
                           : msg.isError
                           ? "bg-red-550 text-white rounded-tl-none font-semibold"
-                          : "bg-slate-50 border border-slate-200/50 text-slate-800 rounded-tl-none dark:bg-slate-850 dark:border-slate-800 dark:text-slate-100"
+                          : "bg-slate-100 border border-slate-200/50 text-slate-800 rounded-tl-none dark:bg-slate-800 dark:border-slate-800 dark:text-slate-100"
                       }`}
                     >
                       {msg.text}
@@ -148,7 +148,7 @@ const ChatBox = () => {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400 flex-shrink-0">
                   <Bot size={16} />
                 </div>
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/50 text-slate-500 rounded-tl-none dark:bg-slate-850 dark:border-slate-800 flex items-center gap-2">
+                <div className="p-4 rounded-2xl bg-slate-100 border border-slate-200/50 text-slate-500 rounded-tl-none dark:bg-slate-800 dark:border-slate-800 flex items-center gap-2">
                   <span className="flex gap-1">
                     <span className="h-2 w-2 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: "0ms" }}></span>
                     <span className="h-2 w-2 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: "150ms" }}></span>
