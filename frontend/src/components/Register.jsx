@@ -17,7 +17,7 @@
 //     }
 
 //     try {
-//       const response = await fetch("http://localhost:5000/api/register", { // Await the fetch call
+//       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/register`, { // Await the fetch call
 //           method: "POST",
 //           headers:{
 //               "Content-Type":"application/json"
